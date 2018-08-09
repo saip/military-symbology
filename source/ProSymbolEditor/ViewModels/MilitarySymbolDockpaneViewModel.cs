@@ -70,7 +70,7 @@ namespace ProSymbolEditor
         {
             get
             {
-                return "mil" + ProSymbolUtilities.StandardString.ToLower();
+                return ProSymbolUtilities.GetMilitaryStyleName();
             }
         }
 
@@ -194,31 +194,42 @@ namespace ProSymbolEditor
             if (Properties.Settings.Default.DefaultStandard ==
                     ProSymbolUtilities.GetStandardString(ProSymbolUtilities.SupportedStandardsType.mil2525c_b2))
                 ProSymbolUtilities.Standard = ProSymbolUtilities.SupportedStandardsType.mil2525c_b2;
+            else if (Properties.Settings.Default.DefaultStandard ==
+                    ProSymbolUtilities.GetStandardString(ProSymbolUtilities.SupportedStandardsType.app6d))
+                ProSymbolUtilities.Standard = ProSymbolUtilities.SupportedStandardsType.app6d;
             else
                 ProSymbolUtilities.Standard = ProSymbolUtilities.SupportedStandardsType.mil2525d;
         }
 
         private async Task Initialize()
         {
-            // Somewhat tricky, see if the project has a GDB with an existing standard, if so just set to that
-            Task<bool> isEnabledMethod = ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync(ProSymbolUtilities.SupportedStandardsType.mil2525d);
-            bool enabled2525D = await isEnabledMethod;
+            // Somewhat tricky, first see if the project has a GDB with an existing standard, 
+            // if so just set standard to that
 
-            Task<bool> isEnabledMethod2 = ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync(ProSymbolUtilities.SupportedStandardsType.mil2525c_b2);
-            bool enabled2525C_B2 = await isEnabledMethod2;
+            Task<bool> isEnabledMethod2525D = ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync(ProSymbolUtilities.SupportedStandardsType.mil2525d);
+            bool enabled2525D = await isEnabledMethod2525D;
 
-            // However, if both standards in project (or neither) - use the default setting
+            Task<bool> isEnabledMethod2525B = ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync(ProSymbolUtilities.SupportedStandardsType.mil2525c_b2);
+            bool enabled2525C_B2 = await isEnabledMethod2525B;
+
+            Task<bool> isEnabledMethodAPP6D = ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync(ProSymbolUtilities.SupportedStandardsType.app6d);
+            bool enabledAPP6D = await isEnabledMethodAPP6D;
+
+            // TRICKY: MilitaryOverlay Template has both 2525 databases in project
+            // However, if both standards in project (or none) - use the default setting
             if ((enabled2525D && enabled2525C_B2) ||
-                (!enabled2525D && !enabled2525C_B2))
+                (!enabled2525D && !enabled2525C_B2 && !enabledAPP6D))
             {
                 setStandardFromSettings();
             }
             else
             {
-                if (enabled2525D)
-                    ProSymbolUtilities.Standard = ProSymbolUtilities.SupportedStandardsType.mil2525d;
-                else
-                    ProSymbolUtilities.Standard = ProSymbolUtilities.SupportedStandardsType.mil2525c_b2;
+                if (enabledAPP6D)
+                    ProSymbolUtilities.Standard = ProSymbolUtilities.SupportedStandardsType.app6d;
+                else if (enabled2525C_B2)
+                        ProSymbolUtilities.Standard = ProSymbolUtilities.SupportedStandardsType.mil2525c_b2;
+                     else
+                        ProSymbolUtilities.Standard = ProSymbolUtilities.SupportedStandardsType.mil2525d;
             }
 
             //Add military style to project
@@ -1007,10 +1018,12 @@ namespace ProSymbolEditor
             {
                 ProSymbolUtilities.SupportedStandardsType newSettingStandard;
 
-                if (settingsWindow.Checked2525D == true)
-                    newSettingStandard = ProSymbolUtilities.SupportedStandardsType.mil2525d;
-                else
+                if (settingsWindow.Checked2525C_B2 == true)
                     newSettingStandard = ProSymbolUtilities.SupportedStandardsType.mil2525c_b2;
+                else if (settingsWindow.CheckedAPP6D)
+                        newSettingStandard = ProSymbolUtilities.SupportedStandardsType.app6d;
+                     else
+                        newSettingStandard = ProSymbolUtilities.SupportedStandardsType.mil2525d;
 
                 // If standard has been changed
                 if (previousSettingStandard != newSettingStandard)

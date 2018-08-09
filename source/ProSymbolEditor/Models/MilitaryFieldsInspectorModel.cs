@@ -267,7 +267,7 @@ namespace ProSymbolEditor
                 GetDomainAndPopulateList(fields, "extendedfunctioncode", ExtendedFunctionCodeValues);
                 GetDomainAndPopulateList(fields, "hqtffd", TfFdHqDomainValues);
             }
-            else // 2525D
+            else // 2525D or APP6D
             {
                 ExtendedFunctionCodeValues.Clear();
                 GetDomainAndPopulateList(fields, "identity", IdentityDomainValues);

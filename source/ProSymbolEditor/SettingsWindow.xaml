@@ -1,9 +1,9 @@
 ﻿<controls:ProWindow 
+    xmlns:controls="clr-namespace:ArcGIS.Desktop.Framework.Controls;assembly=ArcGIS.Desktop.Framework"
     x:Class="ProSymbolEditor.SettingsWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:controls="clr-namespace:ArcGIS.Desktop.Framework.Controls;assembly=ArcGIS.Desktop.Framework"
     xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
     xmlns:local="clr-namespace:ProSymbolEditor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -32,7 +32,7 @@
             Margin="5,5,5,5"
             VerticalAlignment="Top">
             <Label Content="Default _Symbology Standard:"  />
-            <WrapPanel>
+            <StackPanel>
                 <RadioButton
                     Margin="3"
                     Content="MIL-STD-2525D"
@@ -43,7 +43,12 @@
                     Content="MIL-STD-2525B Change 2"
                     GroupName="standardgroup"
                     IsChecked="{Binding Path=Checked2525C_B2, Mode=TwoWay}" />
-            </WrapPanel>
+                <RadioButton
+                    Margin="3"
+                    Content="APP-6(D)"
+                    GroupName="standardgroup"
+                    IsChecked="{Binding CheckedAPP6D, Mode=TwoWay}" />
+            </StackPanel>
         </StackPanel>
         <StackPanel
             Grid.Row="1"

@@ -115,6 +115,12 @@ namespace ProSymbolEditor
                 featureClassExists.Add(prefixName + "Units", false);
             }
 
+            // For now, APP6D has this extra one
+            if (standard == ProSymbolUtilities.SupportedStandardsType.app6d)
+            {
+                featureClassExists.Add(prefixName + "Dismounted", false);
+            }
+
             return featureClassExists;
         }
 

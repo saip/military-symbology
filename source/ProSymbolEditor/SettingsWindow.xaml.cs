@@ -36,14 +36,19 @@ namespace ProSymbolEditor
     public partial class SettingsWindow : ArcGIS.Desktop.Framework.Controls.ProWindow
     {
 
-        // Radio Button binding special binding case:
+        // Radio Button binding special case:
+        // WPF does not enforce only-one-item-checked behavior, so need to do in code behind
         public bool Checked2525D
         {
             get { return _checked2525D; }
             set
             {
                 _checked2525D = value;
-                _checked2525C_B2 = !_checked2525D;
+                if (_checked2525D)
+                {
+                    _checked2525C_B2 = false;
+                    _checkedAPP6D = false;
+                }
             }
         }
         bool _checked2525D;
@@ -54,10 +59,29 @@ namespace ProSymbolEditor
             set
             {
                 _checked2525C_B2 = value;
-                _checked2525D = !_checked2525C_B2;
+                if (_checked2525C_B2)
+                {
+                    _checked2525D = false;
+                    _checkedAPP6D = false;
+                }
             }
         }
         bool _checked2525C_B2;
+
+        public bool CheckedAPP6D
+        {
+            get { return _checkedAPP6D; }
+            set
+            {
+                _checkedAPP6D = value;
+                if (_checkedAPP6D)
+                {
+                    _checked2525D = false;
+                    _checked2525C_B2 = false;
+                }
+            }
+        }
+        bool _checkedAPP6D;
 
         public SettingsWindow()
         {

@@ -32,7 +32,7 @@ namespace ProSymbolEditor
 {
     public class ProSymbolUtilities
     {
-        public enum SupportedStandardsType { mil2525d, mil2525c_b2 };
+        public enum SupportedStandardsType { mil2525d, mil2525c_b2, app6d };
 
         public static SupportedStandardsType Standard
         {
@@ -58,10 +58,13 @@ namespace ProSymbolEditor
 
         public static string GetStandardLabel(SupportedStandardsType standardIn)
         {           
-            if (standardIn == SupportedStandardsType.mil2525d)
-                return "2525D";
-            else
+            if (standardIn == SupportedStandardsType.mil2525c_b2)
                 return "2525B";
+            else
+                if (standardIn == SupportedStandardsType.app6d)
+                    return "APP6D";
+                else
+                    return "2525D";
         }
 
         public static string GetStandardString(SupportedStandardsType standardIn)
@@ -69,7 +72,18 @@ namespace ProSymbolEditor
             if (standardIn == SupportedStandardsType.mil2525c_b2)
                 return "2525C_B2";
             else
-                return "2525D";
+                if (standardIn == SupportedStandardsType.app6d)
+                    return "APP6D";
+                else
+                    return "2525D";
+        }
+
+        public static string GetMilitaryStyleName()
+        {
+            if (ProSymbolUtilities.Standard == ProSymbolUtilities.SupportedStandardsType.app6d)
+                return ProSymbolUtilities.StandardString.ToLower();
+            else
+                return "mil" + ProSymbolUtilities.StandardString.ToLower();
         }
 
         public static string NameSeparator

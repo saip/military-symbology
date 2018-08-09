@@ -63,6 +63,7 @@ namespace ProSymbolEditor
             _symbolSetMappings2525D.Add(new SymbolSetMapping("SIGINT", GeometryType.Point, "53"));
             _symbolSetMappings2525D.Add(new SymbolSetMapping("SIGINT", GeometryType.Point, "54"));
             _symbolSetMappings2525D.Add(new SymbolSetMapping("Cyberspace", GeometryType.Point, "60"));
+            _symbolSetMappings2525D.Add(new SymbolSetMapping("Dismounted", GeometryType.Point, "27"));
 
             _symbolSetMappings2525C = new List<SymbolSetMapping>();
             _symbolSetMappings2525C.Add(new SymbolSetMapping("Air", GeometryType.Point, "^[S].[A].{7,}"));
