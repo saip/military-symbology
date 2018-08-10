@@ -83,8 +83,36 @@ namespace ProSymbolEditor
         }
         bool _checkedAPP6D;
 
-        public SettingsWindow()
+        public ProSymbolUtilities.SupportedStandardsType Standard
         {
+            get
+            {
+                ProSymbolUtilities.SupportedStandardsType standard;
+
+                if (Checked2525C_B2 == true)
+                    standard = ProSymbolUtilities.SupportedStandardsType.mil2525c_b2;
+                else if (CheckedAPP6D)
+                         standard = ProSymbolUtilities.SupportedStandardsType.app6d;
+                     else
+                         standard = ProSymbolUtilities.SupportedStandardsType.mil2525d;
+
+                return standard;
+            }
+        }
+
+        public SettingsWindow(ProSymbolUtilities.SupportedStandardsType standard)
+        {
+            _checked2525D = false;
+            _checked2525C_B2 = false;
+            _checkedAPP6D = false;
+
+            if (standard == ProSymbolUtilities.SupportedStandardsType.app6d)
+                _checkedAPP6D = true;
+            else if (standard == ProSymbolUtilities.SupportedStandardsType.mil2525c_b2)
+                     _checked2525C_B2 = true;
+                 else
+                     _checked2525D = true;
+
             InitializeComponent();
 
             this.DataContext = this;

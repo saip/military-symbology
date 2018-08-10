@@ -1007,34 +1007,32 @@ namespace ProSymbolEditor
 
         private async void ShowSettingsWindow(object parameter)
         {
-            SettingsWindow settingsWindow = new SettingsWindow();
-            settingsWindow.Checked2525D =
-                (ProSymbolUtilities.Standard == ProSymbolUtilities.SupportedStandardsType.mil2525d);
+            SettingsWindow settingsWindow = new SettingsWindow(ProSymbolUtilities.Standard);
 
             ProSymbolUtilities.SupportedStandardsType previousSettingStandard = ProSymbolUtilities.Standard;
 
             settingsWindow.ShowDialog(FrameworkApplication.Current.MainWindow);
             if (settingsWindow.DialogResult == true)
             {
-                ProSymbolUtilities.SupportedStandardsType newSettingStandard;
+                ProSymbolUtilities.SupportedStandardsType newSettingStandard =
+                    settingsWindow.Standard;
 
-                if (settingsWindow.Checked2525C_B2 == true)
-                    newSettingStandard = ProSymbolUtilities.SupportedStandardsType.mil2525c_b2;
-                else if (settingsWindow.CheckedAPP6D)
-                        newSettingStandard = ProSymbolUtilities.SupportedStandardsType.app6d;
-                     else
-                        newSettingStandard = ProSymbolUtilities.SupportedStandardsType.mil2525d;
+                // TODO: this code block below is only to support the Military Overlay 
+                // template that contains both 2525D and 2525B standards in the project
+                // if the template is ever changed to contain just 1 standard per project
+                // this logic can be simplified greatly to just "if enabled with previous standard
+                // don't allow the switch to new standard"
 
                 // If standard has been changed
                 if (previousSettingStandard != newSettingStandard)
                 {
-                    Task<bool> isEnabledMethod = ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync();
-                    bool enabledWithPreviousStandard = await isEnabledMethod;
+                    // Check if addin was enabled with previous standard
+                    bool enabledWithPreviousStandard = await ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync();
 
-                    //Check for Schema again
-                    Task<bool> isEnabledMethodAfterChange = ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync(newSettingStandard);
-                    bool enabledWithNewStandard = await isEnabledMethodAfterChange;
+                    // Check for Schema again with new standard
+                    bool enabledWithNewStandard = await ProSymbolEditorModule.Current.MilitaryOverlaySchema.ShouldAddInBeEnabledAsync(newSettingStandard);
 
+                    // Don't allow switch if previous schema present
                     if (enabledWithPreviousStandard && !enabledWithNewStandard)
                     {
                         // TRICKY: If Enabled with previous standard but not current, don't allow the switch
