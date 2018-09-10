@@ -136,6 +136,13 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Extensions.cs" />
+    <Compile Include="ViewModels\CoordinateTabViewModel.cs" />
+    <Compile Include="ViewModels\DockpaneViewModel.cs" />
+    <Compile Include="ViewModels\FavoritesTabViewModel.cs" />
+    <Compile Include="ViewModels\LabelTabViewModel.cs" />
+    <Compile Include="ViewModels\SearchTabViewModel.cs" />
+    <Compile Include="ViewModels\SymbolTabViewModel.cs" />
+    <Compile Include="ViewModels\TabBaseViewModel.cs" />
     <Compile Include="Views\CoordinateView.xaml.cs">
       <DependentUpon>CoordinateView.xaml</DependentUpon>
     </Compile>
